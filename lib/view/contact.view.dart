@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:premierapp/view/ajoutEtudiant.view.dart';
 import 'package:premierapp/view/detail.contact.dart';
 import 'package:premierapp/widgets/menu.widgets.dart';
 import 'package:http/http.dart' as http;
@@ -40,7 +41,7 @@ class _ContactState extends State<Contact> {
 
                onTap: (){
                  print(listEtudiant[index] );
-                 Navigator.push(context, MaterialPageRoute(builder: (context) =>Detail(etudiantData:listEtudiant[index], nom:listEtudiant[index]["nom"]) ) );
+                   Navigator.push(context, MaterialPageRoute(builder: (context) =>Detail(etudiantData:listEtudiant[index], nom:listEtudiant[index]["nom"]) ) );
 
                },
                title: InkWell(
@@ -53,7 +54,13 @@ class _ContactState extends State<Contact> {
              );
          },),
         ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
 
+        onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>AjoutEtudiant() ) );
+        },
+      ),
     );
 
   }
@@ -62,15 +69,15 @@ class _ContactState extends State<Contact> {
     var url = 'http://localhost:8989/api-flutter/etudiant/listEtudiant';
     print(url);
     var reponse = await http.get(Uri.parse(url));
-setState(() {
+    setState(() {
 
-    print("La reponse  ${reponse.statusCode}");
-    print("Le body  ${reponse.body}");
-    if( reponse.statusCode ==200){
-      listEtudiant = json.decode(reponse.body) ;
-    }
+        print("La reponse  ${reponse.statusCode}");
+        print("Le body  ${reponse.body}");
+        if( reponse.statusCode ==200){
+          listEtudiant = json.decode(reponse.body) ;
+        }
 
- });
+     });
 
   }
 }
