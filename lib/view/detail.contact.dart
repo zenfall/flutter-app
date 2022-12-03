@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http ;
+import 'package:premierapp/view/contact.view.dart';
 
 class Detail extends StatelessWidget {
 
@@ -30,7 +31,13 @@ class Detail extends StatelessWidget {
 
     appBar: AppBar(
     title: Text("Detail"),
+    leading: IconButton(onPressed: () {
+        Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) =>
+        Contact() ) );
+        }, icon: const Icon(Icons.arrow_back),
       ),
+    ),
 
     body: Center(
       child: Container(
@@ -81,15 +88,7 @@ class Detail extends StatelessWidget {
                       onPressed:(){
                           print("Annuler ");
 
-                          Fluttertoast.showToast(
-                              msg: "Annuler",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIosWeb: 5,
-                              backgroundColor: Colors.red,
-                              textColor: Colors.white,
-                              fontSize: 16.0
-                          );
+                         Navigator.pop(context);
                     }
                       ),
                     SizedBox(width: 10.0),

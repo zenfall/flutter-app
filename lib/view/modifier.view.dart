@@ -1,33 +1,40 @@
 import 'dart:convert';
-import 'dart:js';
 
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:premierapp/view/contact.view.dart';
 
-class AjoutEtudiant extends StatelessWidget {
-  //const ({Key? key}) : super(key: key);
+class ModifierEtudiant extends StatelessWidget {
+ // const ModifierEtudiant({Key? key}) : super(key: key);
+
+  dynamic etudiantData;
   final formKey = GlobalKey<FormState>();
+  ModifierEtudiant( {this.etudiantData});
   TextEditingController nomController = TextEditingController ();
   TextEditingController prenomController = TextEditingController ();
   TextEditingController matriculeController = TextEditingController ();
   TextEditingController idController = TextEditingController ();
 
-  dynamic etudiant = [];
+
 
   @override
   Widget build(BuildContext context) {
+
+    print(etudiantData);
+    nomController.text = etudiantData["nom"].toString();
+    prenomController.text = etudiantData["prenom"].toString();
+    matriculeController.text = etudiantData["matricule"].toString();
+    idController.text = etudiantData["id"].toString();
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Ajout Etudiant"),
+        title: Text("Modifier"),
         leading: IconButton(onPressed: () {
-          Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) =>
-          Contact() ) );
-    }, icon: const Icon(Icons.arrow_back),
-
-    )  ,
+        Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) =>
+        Contact() ) );
+        }, icon: const Icon(Icons.arrow_back),
+      ),
       ),
       body: Form(
         key: formKey,
@@ -75,7 +82,7 @@ class AjoutEtudiant extends StatelessWidget {
                 child: TextFormField(
                   controller: matriculeController,
                   decoration: InputDecoration(
-                      labelText: 'Prenom',
+                      labelText: 'Matricule',
                       border: OutlineInputBorder(
                           borderRadius:
                           BorderRadius.all(Radius.circular(20.0)))),
@@ -99,29 +106,13 @@ class AjoutEtudiant extends StatelessWidget {
                       // etudiant.add( prenomController.text);
                       // etudiant.add(matriculeController.text);
 
-                      ajoutEtudiant(nomController.text, prenomController.text,
-                          matriculeController.text).then((value) {
-                            print(value);
-                            if(value == 200 ) {
-                              print("in if ");
-                              Navigator.push(context, MaterialPageRoute(builder: (context) =>Contact() ));
+                      modifierEtudiant(nomController.text, prenomController.text,
+                          matriculeController.text,int.parse(idController.text.toString()) );
 
-                              Fluttertoast.showToast(
-                                  msg: "Etudiant ajouté avec succès",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.CENTER,
-                                  timeInSecForIosWeb: 5,
-                                  backgroundColor: Colors.red,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0
-                              );
-                            }
-                      });
-
-                     // Navigator.pop(context);
+                      Navigator.pop(context);
                     }
                   },
-                  child: Text('Ajouter'),
+                  child: Text('Modifier'),
                 ),
 
               ),
@@ -130,10 +121,10 @@ class AjoutEtudiant extends StatelessWidget {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-
+                    if (formKey.currentState!.validate()) {
 
                       Navigator.pop(context);
-
+                    }
                   },
                   child: Text('Annuler'),
                 ),
@@ -142,15 +133,15 @@ class AjoutEtudiant extends StatelessWidget {
             ]
         ),
       ) ,
-    );
+    );;
   }
 
-  Future  ajoutEtudiant(String nom,String prenom, String matricule) async {
+  Future modifierEtudiant(String nom,String prenom, String matricule,int id) async {
 
 
-    var url = 'http://localhost:8989/api-flutter/etudiant/ajoutEtudiant';
+    var url = 'http://localhost:8989/api-flutter/etudiant/modifierEtudiant/${id}';
     print(url);
-    var reponse = await http.post(Uri.parse(url),
+    var reponse = await http.put(Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -166,12 +157,11 @@ class AjoutEtudiant extends StatelessWidget {
     print("Le body  ${reponse.body}");
     if( reponse.statusCode ==200){
       //listEtudiant = json.decode(reponse.body) ;
-      print("Etudiant crée avec succès !");
-      return reponse.statusCode;
-
+      print("Etudiant modifier !");
     }
 
     // });
 
   }
+
 }

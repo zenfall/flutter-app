@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:premierapp/main.dart';
 import 'package:premierapp/view/ajoutEtudiant.view.dart';
 import 'package:premierapp/view/detail.contact.dart';
+import 'package:premierapp/view/modifier.view.dart';
 import 'package:premierapp/widgets/menu.widgets.dart';
 import 'package:http/http.dart' as http;
 
@@ -29,6 +31,12 @@ class _ContactState extends State<Contact> {
 
         appBar: AppBar(
           title: Text("First App"),
+          leading: IconButton(onPressed: () {
+            Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) =>
+                Supdeco() ) );
+            }, icon: const Icon(Icons.arrow_back),
+          ),
         ),
 
         body: Center(
@@ -45,11 +53,19 @@ class _ContactState extends State<Contact> {
 
                },
                title: InkWell(
+
                  child: Text("${listEtudiant[index]["nom"]}"),
 
                ),
                subtitle: Text("${listEtudiant[index]["prenom"]}"),
                trailing: Text("${listEtudiant[index]["matricule"]}"),
+               leading: IconButton(onPressed: () {
+                 Navigator.push(context, 
+                     MaterialPageRoute(builder: (context) =>
+                         ModifierEtudiant(etudiantData:listEtudiant[index]) ) );
+               }, icon: const Icon(Icons.brush),
+
+               )  ,
 
              );
          },),
